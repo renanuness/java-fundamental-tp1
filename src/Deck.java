@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Deck {
+    private static long seed = System.nanoTime();
     private List<Card> cards;
 
     public Deck(){
@@ -13,18 +15,27 @@ public class Deck {
                 cards.add(card);
             }
         }
-        Shuffle();
-        Shuffle();
+        shuffle();
     }
 
 
     public Card giveCard(){
-        Shuffle();
+        shuffle();
         return cards.removeFirst();
     }
 
-    public void Shuffle(){
-        RandomComparator comparator = new RandomComparator();
-        Collections.sort(cards, comparator);
+    public void shuffle(){
+        Random rand = new Random();
+        rand.setSeed(seed++);
+        if( seed == Long.MAX_VALUE){
+            seed = 0;
+        }
+        Collections.shuffle(cards, rand);
+        Collections.shuffle(cards);
+        Collections.shuffle(cards, rand);
+        Collections.shuffle(cards);
+        Collections.shuffle(cards, rand);
+        Collections.shuffle(cards);
+
     }
 }

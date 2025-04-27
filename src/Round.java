@@ -40,4 +40,11 @@ public class Round {
                 }
             }
         }
+
+    public void bet(){
+        for (int i = 0; i < players.size(); i++) {
+            Seat player = players.get(i);
+            Actions action = player.getAction();
+        }
+    }
 }

@@ -21,26 +21,7 @@ public class Game {
     private void AddPlayers() throws IOException {
         players = new ArrayList<Player>();
 
-        if(Files.notExists(Path.of("players.txt"))) {
-            Path file = Files.createFile(Path.of("players.txt"));
-            List<String> names = new ArrayList<String>();
-            names.add("Renan");
-            names.add("Luis");
-            names.add("S");
-            names.add("Fernando");
-            names.add("S");
-            names.add("João");
-            names.add("N");
-
-            Files.write(file, names);
-        }
-        Scanner sc = null;
-        try {
-            FileReader fr = new FileReader("players.txt");
-            sc = new Scanner(fr);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        Scanner sc = getScanner();
         for(int i = 0; i < MAX_PLAYERS; i++){
             if ( i > 1){
                 System.out.println("Deseja inserir novo jogador? S ou N");
@@ -61,5 +42,32 @@ public class Game {
         round = new Round(players);
         round.startRound();
         round.printPlayersHand();
+    }
+
+    private Scanner getScanner() throws IOException {
+        if( Program.MOCK){
+            if(Files.notExists(Path.of("players.txt"))) {
+                Path file = Files.createFile(Path.of("players.txt"));
+                List<String> names = new ArrayList<String>();
+                names.add("Renan");
+                names.add("Luis");
+                names.add("S");
+                names.add("Fernando");
+                names.add("S");
+                names.add("João");
+                names.add("N");
+
+                Files.write(file, names);
+            }
+            Scanner sc = null;
+            try {
+                FileReader fr = new FileReader("players.txt");
+                return new Scanner(fr);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            return new Scanner(System.in);
+        }
     }
 }
