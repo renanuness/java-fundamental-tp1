@@ -1,4 +1,5 @@
 enum Actions {
+    NONE,
     CALL,
     BET,
     RAISE,

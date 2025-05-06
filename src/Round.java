@@ -14,7 +14,6 @@ public class Round {
         for(Player player : players){
             this.players.add(new Seat(player));
         }
-
         dealer = 0;
         smallBLind = 1;
         bigBlind = smallBLind + 1 % players.size();
@@ -47,4 +46,55 @@ public class Round {
             Actions action = player.getAction();
         }
     }
+
+    public void preFlop(){
+        for (int i = 0; i < players.size(); i++) {
+            int playerPosition = i + bigBlind + 1 % players.size();
+            Seat playerToDecide = players.get(playerPosition);
+
+            if(playerPosition == smallBLind){
+                // actions available:
+                // call
+                // fold
+                // raise
+                List<Actions> actions = new ArrayList<Actions>();
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CALL);
+                actions.add(Actions.FOLD);
+                playerToDecide.getAction(actions);
+            }else if(playerPosition == bigBlind){
+                // actions available:
+                // check
+                // raise
+                List<Actions> actions = new ArrayList<Actions>();
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CHECK);
+                playerToDecide.getAction(actions);
+            }else{
+                // actions available:
+                // call
+                // fold
+                // raise
+                List<Actions> actions = new ArrayList<Actions>();
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CALL);
+                actions.add(Actions.FOLD);
+                playerToDecide.getAction(actions);
+            }
+
+            // se alguém deu raise, é preciso passar por todos os jogadores que ainda estão na rodada
+            // e perguntar call, raise, fold
+            // enquanto alguém der raise, repetir
+        }
+    }
 }
+/*
+States:
+PreFlop
+    Call
+    Raise
+    Fold
+    Check (só quem é big blind)
+PosFlop
+
+ */

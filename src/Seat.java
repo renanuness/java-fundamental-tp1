@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Seat {
     private Player player;
@@ -25,5 +26,44 @@ public class Seat {
 
     public String getPlayerName(){
         return player.getName();
+    }
+
+    public Actions getAction(List<Actions> actions){
+        do {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Defina sua ação:");
+
+            for(Actions action : actions){
+                if(action == Actions.CALL){
+                    System.out.println("Call - C");
+                }else if(action == Actions.RAISE){
+                    System.out.println("Raise - R");
+                }else if(action == Actions.FOLD) {
+                    System.out.println("Fold - F");
+                }else if(action == Actions.CHECK){
+                    System.out.println("Check - X");
+                }else if(action == Actions.BET){
+                    System.out.println("Bet - B");
+                }
+            }
+
+            String actionStr = scanner.nextLine();
+            Actions chooseAction = Actions.NONE;
+            if (actionStr.equalsIgnoreCase("r")) {
+                chooseAction = Actions.RAISE;
+            } else if (actionStr.equalsIgnoreCase("f")) {
+                chooseAction = Actions.FOLD;
+            } else if (actionStr.equalsIgnoreCase("c")) {
+                chooseAction = Actions.CALL;
+            }else if (actionStr.equalsIgnoreCase("b")) {
+                chooseAction = Actions.BET;
+            }else if (actionStr.equalsIgnoreCase("x")) {
+                chooseAction = Actions.CHECK;
+            }
+
+            if(actions.contains(chooseAction)){
+                return chooseAction;
+            }
+        }while(true);
     }
 }
