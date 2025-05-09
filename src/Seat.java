@@ -5,12 +5,14 @@ import java.util.Scanner;
 public class Seat {
     private Player player;
     private List<Card> cards;
+    private boolean active;
     private int bet;
     private Actions action;
 
     public Seat(Player player){
         this.player = player;
         this.cards = new ArrayList<Card>();
+        bet = 0;
     }
 
     public void giveCard(Card card) throws Exception {
@@ -31,7 +33,8 @@ public class Seat {
     public Actions getAction(List<Actions> actions){
         do {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Defina sua ação:");
+            System.out.printf("Você já apostou: %s\n", bet);
+            System.out.printf("Defina sua ação %s:\n", getPlayerName());
 
             for(Actions action : actions){
                 if(action == Actions.CALL){
@@ -65,5 +68,32 @@ public class Seat {
                 return chooseAction;
             }
         }while(true);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int bet(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Quanto você quer apostar?");
+        int betValue = scanner.nextInt();
+        return betValue;
+    }
+
+    public void makeBet(int value) {
+        bet += value;
+    }
+
+    public int getBet() {
+        return bet;
+    }
+
+    public void setBet(int bet) {
+        this.bet = bet;
     }
 }

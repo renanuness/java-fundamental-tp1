@@ -42,6 +42,7 @@ public class Game {
         round = new Round(players);
         round.startRound();
         round.printPlayersHand();
+        round.preFlop();
     }
 
     private Scanner getScanner() throws IOException {
