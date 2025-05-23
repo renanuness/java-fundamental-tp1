@@ -19,7 +19,7 @@ public class Card {
         this.value = value;
     }
 
-    public String print(){
-        return rank + " " + suit.toString();
+    public void print(){
+        System.out.println(rank + " " + suit.toString());
     }
 }

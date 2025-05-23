@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b86305aa-1ed2-402d-8408-ca620469a0c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Round.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Round.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Seat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Seat.java" afterDir="false" />
     </list>
@@ -82,7 +84,7 @@
       <workItem from="1746529359899" duration="6176000" />
       <workItem from="1746791433300" duration="6423000" />
       <workItem from="1747135575586" duration="3868000" />
-      <workItem from="1748000334125" duration="2502000" />
+      <workItem from="1748000334125" duration="5949000" />
     </task>
     <servers />
   </component>
@@ -94,13 +96,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Round.java</url>
-          <line>63</line>
-          <option name="timeStamp" value="11" />
+          <line>210</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Round.java</url>
-          <line>83</line>
-          <option name="timeStamp" value="13" />
+          <line>230</line>
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

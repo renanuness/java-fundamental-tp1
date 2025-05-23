@@ -11,9 +11,12 @@ public class Round {
     private int maxBet;
     private Deck deck;
     private List<Seat> players;
+    private List<Card> cards;
+    private boolean hasRaised;
 
     public Round(List<Player> players){
         this.players = new ArrayList<Seat>();
+        cards = new ArrayList<>();
         for(Player player : players){
             this.players.add(new Seat(player));
         }
@@ -24,6 +27,7 @@ public class Round {
         bigBlindValue = smallBlindValue * 2;
         maxBet = bigBlindValue;
         deck = new Deck();
+        hasRaised = false;
     }
 
     public void startRound() throws Exception {
@@ -44,11 +48,8 @@ public class Round {
     public void printPlayersHand() throws Exception {
             for (int i = 0; i < players.size(); i++) {
                 Seat player = players.get(i);
-                List<Card> cards = player.showHand();
                 System.out.printf("Jogador %s%n", player.getPlayerName());
-                for (Card card : cards) {
-                    System.out.println(card.print());
-                }
+                player.showHand();
             }
         }
 
@@ -66,7 +67,11 @@ public class Round {
                 continue;
             }
             List<Actions> actions = new ArrayList<Actions>();
-            if(playerPosition2 == smallBLind){
+            if(hasRaised){
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CALL);
+                actions.add(Actions.FOLD);
+            }else if(playerPosition2 == smallBLind){
                 actions.add(Actions.RAISE);
                 actions.add(Actions.CALL);
                 actions.add(Actions.FOLD);
@@ -83,17 +88,7 @@ public class Round {
             playerPosition2 = (playerPosition2 + 1) % players.size();
             currentPlayer = players.get(playerPosition2);
         }
-
-        for (int i = 0; i < players.size(); i++) {
-            Seat player = players.get(i);
-
-            if(!player.isActive()){
-                System.out.printf("Jogador %s deu fold%n ", player.getPlayerName());
-            }else{
-                System.out.printf("Jogador %s apostou %s%n ", player.getPlayerName(), player.getBet());
-            }
-
-        }
+        printPlayersBets();
     }
 
     private void processPlayerAction(int seat, Actions action) throws Exception {
@@ -103,6 +98,7 @@ public class Round {
 
         }else if(action == Actions.RAISE){
             // pegar o valor que foi aumentado, atualizar a max bet
+            hasRaised = true;
             Seat player = players.get(seat);
             int value = player.bet();
             maxBet += value;
@@ -128,15 +124,146 @@ public class Round {
         Seat playerToDecide = players.get(seat);
         playerToDecide.setHasToPlay(false);
     }
+
+    public void flop() throws Exception {
+        // Virar três cartas na mesa e fazer a rodada de apostas novamente
+        for(Seat seat : players){
+            if(seat.isActive()) {
+                seat.setHasToPlay(true);
+            }
+        }
+        for(int i = 0; i < 3; i++){
+            deck.shuffle();
+            cards.add(deck.giveCard());
+        }
+        printCards();
+
+        int playerPosition2 = (bigBlind + 1) % players.size();
+        Seat currentPlayer = players.get(playerPosition2);
+        while(currentPlayer.hasToPlay()){
+            if(!currentPlayer.isActive()){
+                continue;
+            }
+            List<Actions> actions = new ArrayList<Actions>();
+            if(!hasRaised){
+                actions.add(Actions.BET);
+                actions.add(Actions.CHECK);
+            }else{
+                //
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CALL);
+                actions.add(Actions.FOLD);
+            }
+
+            Actions action = currentPlayer.getAction(actions);
+            processPlayerAction(playerPosition2, action);
+            playerPosition2 = (playerPosition2 + 1) % players.size();
+            currentPlayer = players.get(playerPosition2);
+        }
+    }
+
+    public void turn() throws Exception {
+        for(Seat seat : players){
+            if(seat.isActive()) {
+                seat.setHasToPlay(true);
+            }
+        }
+        deck.shuffle();
+        cards.add(deck.giveCard());
+        printCards();
+
+        int playerPosition2 = (bigBlind + 1) % players.size();
+        Seat currentPlayer = players.get(playerPosition2);
+        while(currentPlayer.hasToPlay()){
+            if(!currentPlayer.isActive()){
+                continue;
+            }
+            List<Actions> actions = new ArrayList<Actions>();
+            if(!hasRaised){
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CHECK);
+            }else{
+                //
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CALL);
+                actions.add(Actions.FOLD);
+            }
+
+            Actions action = currentPlayer.getAction(actions);
+            processPlayerAction(playerPosition2, action);
+            playerPosition2 = (playerPosition2 + 1) % players.size();
+            currentPlayer = players.get(playerPosition2);
+        }
+    }
+
+    public void river() throws Exception {
+        for(Seat seat : players){
+            if(seat.isActive()) {
+                seat.setHasToPlay(true);
+            }
+        }
+        deck.shuffle();
+        cards.add(deck.giveCard());
+        printCards();
+
+        int playerPosition2 = (bigBlind + 1) % players.size();
+        Seat currentPlayer = players.get(playerPosition2);
+        while(currentPlayer.hasToPlay()){
+            if(!currentPlayer.isActive()){
+                continue;
+            }
+            List<Actions> actions = new ArrayList<Actions>();
+            if(!hasRaised){
+                actions.add(Actions.BET);
+                actions.add(Actions.CHECK);
+            }else{
+                //
+                actions.add(Actions.RAISE);
+                actions.add(Actions.CALL);
+                actions.add(Actions.FOLD);
+            }
+
+            Actions action = currentPlayer.getAction(actions);
+            processPlayerAction(playerPosition2, action);
+            playerPosition2 = (playerPosition2 + 1) % players.size();
+            currentPlayer = players.get(playerPosition2);
+        }
+    }
+
+    private void printCards() {
+        for(Card card : cards){
+            card.print();
+        }
+    }
+
+    private void printPlayersBets() {
+        for (Seat player : players) {
+            if (!player.isActive()) {
+                System.out.printf("Jogador %s deu fold\n", player.getPlayerName());
+            } else {
+                System.out.printf("Jogador %s apostou %s\n", player.getPlayerName(), player.getBet());
+            }
+
+        }
+    }
+
+    public void revealCards() throws Exception {
+        for(Seat seat : players){
+            if(!seat.isActive()){
+                continue;
+            }
+
+            System.out.printf("Jogador %s%n", seat.getPlayerName());
+            seat.showHand();
+            System.out.println("=============");
+        }
+        printCards();
+    }
 }
 /*
-States:
-PreFlop
-    Call
-    Raise
-    Fold
-    Check (só quem é big blind)
-PosFlop
-
+TODO:
+    Criar lógica de ganhador
+    ALl-in
+    Finalizar o round dando as fichas para o ganhador
  */
 

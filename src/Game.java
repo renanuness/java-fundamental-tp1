@@ -43,6 +43,13 @@ public class Game {
         round.startRound();
         round.printPlayersHand();
         round.preFlop();
+        round.flop();
+        System.out.println("=========================================================");
+        round.turn();
+        System.out.println("=========================================================");
+        round.river();
+        System.out.println("=========================================================");
+        round.revealCards();
     }
 
     private Scanner getScanner() throws IOException {

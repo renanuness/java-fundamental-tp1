@@ -23,8 +23,10 @@ public class Seat {
         cards.add(card);
     }
 
-    public List<Card> showHand(){
-        return cards;
+    public void showHand(){
+        for (Card card : cards) {
+            card.print();
+        }
     }
 
     public String getPlayerName(){
