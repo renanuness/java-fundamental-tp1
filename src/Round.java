@@ -11,7 +11,6 @@ public class Round {
     private int maxBet;
     private Deck deck;
     private List<Seat> players;
-    private boolean hasRaised;
 
     public Round(List<Player> players){
         this.players = new ArrayList<Seat>();
@@ -23,7 +22,7 @@ public class Round {
         bigBlind = smallBLind + 1 % players.size();
         smallBlindValue = 5;
         bigBlindValue = smallBlindValue * 2;
-        maxBet = bigBlind;
+        maxBet = bigBlindValue;
         deck = new Deck();
     }
 
@@ -35,9 +34,10 @@ public class Round {
 
             }
         }
-        for (int i = 0; i < players.size(); i++) {
-            Seat seat = players.get(i);
+
+        for (Seat seat : players) {
             seat.setActive(true);
+            seat.setHasToPlay(true);
         }
     }
 
@@ -53,26 +53,24 @@ public class Round {
         }
 
     public void preFlop() throws Exception {
-        hasRaised = false;
-
         // Fazer o small blind e o big blind apostarem
         Seat sbPlayer = players.get(smallBLind);
         Seat bbPlayer = players.get(bigBlind);
         sbPlayer.makeBet(smallBlindValue);
         bbPlayer.makeBet(bigBlindValue);
 
-        for (int i = 0; i < players.size(); i++) {
-            int playerPosition = (i + bigBlind + 1) % players.size();
-            Seat playerToDecide = players.get(playerPosition);
-            if(!playerToDecide.isActive()){
+        int playerPosition2 = (bigBlind + 1) % players.size();
+        Seat currentPlayer = players.get(playerPosition2);
+        while(currentPlayer.hasToPlay()){
+            if(!currentPlayer.isActive()){
                 continue;
             }
             List<Actions> actions = new ArrayList<Actions>();
-            if(playerPosition == smallBLind){
+            if(playerPosition2 == smallBLind){
                 actions.add(Actions.RAISE);
                 actions.add(Actions.CALL);
                 actions.add(Actions.FOLD);
-            }else if(playerPosition == bigBlind){
+            }else if(playerPosition2 == bigBlind){
                 actions.add(Actions.RAISE);
                 actions.add(Actions.CHECK);
             }else{
@@ -80,24 +78,10 @@ public class Round {
                 actions.add(Actions.CALL);
                 actions.add(Actions.FOLD);
             }
-            Actions action = playerToDecide.getAction(actions);
-            processPlayerAction(i, action);
-        }
-
-        while(hasRaised){
-            hasRaised = false;
-            for (int i = 0; i < players.size(); i++) {
-                Seat player = players.get(i);
-                if(!player.isActive()){
-                    continue;
-                }
-                List<Actions> actions = new ArrayList<Actions>();
-                actions.add(Actions.RAISE);
-                actions.add(Actions.CALL);
-                actions.add(Actions.FOLD);
-                Actions action = player.getAction(actions);
-                processPlayerAction(i, action);
-            }
+            Actions action = currentPlayer.getAction(actions);
+            processPlayerAction(playerPosition2, action);
+            playerPosition2 = (playerPosition2 + 1) % players.size();
+            currentPlayer = players.get(playerPosition2);
         }
 
         for (int i = 0; i < players.size(); i++) {
@@ -118,19 +102,31 @@ public class Round {
         }else if(action == Actions.CHECK){
 
         }else if(action == Actions.RAISE){
-            hasRaised = true;
             // pegar o valor que foi aumentado, atualizar a max bet
             Seat player = players.get(seat);
             int value = player.bet();
             maxBet += value;
             player.makeBet(value);
+            for (int i = 0; i < players.size(); i++) {
+                Seat playerToDecide = players.get(i);
+                if(!playerToDecide.isActive() || playerToDecide.getPlayerName().equals(player.getPlayerName())){
+                    continue;
+                }
+                playerToDecide.setHasToPlay(true);
+            }
+
         }else if(action == Actions.CALL){
             Seat player = players.get(seat);
             int valueToBet = maxBet - player.getBet();
             player.makeBet(valueToBet);
         }else if(action == Actions.BET){
-            hasRaised = true;
+            Seat player = players.get(seat);
+            int value = player.bet();
+            player.makeBet(value);
         }
+
+        Seat playerToDecide = players.get(seat);
+        playerToDecide.setHasToPlay(false);
     }
 }
 /*
@@ -143,3 +139,4 @@ PreFlop
 PosFlop
 
  */
+

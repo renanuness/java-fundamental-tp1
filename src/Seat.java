@@ -8,6 +8,7 @@ public class Seat {
     private boolean active;
     private int bet;
     private Actions action;
+    private boolean hasToPlay = false;
 
     public Seat(Player player){
         this.player = player;
@@ -33,8 +34,8 @@ public class Seat {
     public Actions getAction(List<Actions> actions){
         do {
             Scanner scanner = new Scanner(System.in);
-            System.out.printf("Você já apostou: %s\n", bet);
             System.out.printf("Defina sua ação %s:\n", getPlayerName());
+            System.out.printf("Você já apostou: %s\n", bet);
 
             for(Actions action : actions){
                 if(action == Actions.CALL){
@@ -85,6 +86,18 @@ public class Seat {
         return betValue;
     }
 
+    public int bet(int minValue){
+        Scanner scanner = new Scanner(System.in);
+        while(true) {
+            System.out.println("Quanto você quer apostar?");
+            int betValue = scanner.nextInt();
+            if(betValue >= minValue) {
+                return betValue;
+            }
+            System.out.printf("Você precisa apostar pelo menos %d\n", minValue);
+        }
+    }
+
     public void makeBet(int value) {
         bet += value;
     }
@@ -95,5 +108,13 @@ public class Seat {
 
     public void setBet(int bet) {
         this.bet = bet;
+    }
+
+    public boolean hasToPlay() {
+        return hasToPlay;
+    }
+
+    public void setHasToPlay(boolean hasToPlay) {
+        this.hasToPlay = hasToPlay;
     }
 }
