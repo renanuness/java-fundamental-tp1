@@ -265,5 +265,9 @@ TODO:
     Criar lógica de ganhador
     ALl-in
     Finalizar o round dando as fichas para o ganhador
+    Refactor utilizando alguns design patterns para melhorar o código
+    Adicionar IA
+    Adicionar multiplayer online
+
  */
 
