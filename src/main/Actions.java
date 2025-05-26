@@ -1,3 +1,5 @@
+package main;
+
 enum Actions {
     NONE,
     CALL,

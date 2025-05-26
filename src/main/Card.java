@@ -1,3 +1,5 @@
+package main;
+
 public class Card {
     private int value;
     private Suits suit;
@@ -21,5 +23,9 @@ public class Card {
 
     public void print(){
         System.out.println(rank + " " + suit.toString());
+    }
+
+    public Suits getSuit(){
+        return suit;
     }
 }

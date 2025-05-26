@@ -1,4 +1,5 @@
-import java.io.File;
+package main;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -54,8 +55,8 @@ public class Game {
 
     private Scanner getScanner() throws IOException {
         if( Program.MOCK){
-            if(Files.notExists(Path.of("players.txt"))) {
-                Path file = Files.createFile(Path.of("players.txt"));
+            if(Files.notExists(Path.of("main/players.txt"))) {
+                Path file = Files.createFile(Path.of("main/players.txt"));
                 List<String> names = new ArrayList<String>();
                 names.add("Renan");
                 names.add("Luis");
@@ -69,7 +70,7 @@ public class Game {
             }
             Scanner sc = null;
             try {
-                FileReader fr = new FileReader("players.txt");
+                FileReader fr = new FileReader("main/players.txt");
                 return new Scanner(fr);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);

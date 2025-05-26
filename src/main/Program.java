@@ -1,3 +1,5 @@
+package main;
+
 public class Program {
     public static boolean MOCK = false;
     public static void main(String[] args) throws Exception {
