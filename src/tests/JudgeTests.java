@@ -204,6 +204,22 @@ public class JudgeTests {
         judge.testAllPossibilities();
         int score = judge.getBestHandScore();
 
-        assertEquals(20, score);
+        var bestHand = judge.getBestHand();
+
+        assertEquals(Suits.HEARTS, bestHand.get(0).getSuit());
+        assertEquals(8, bestHand.get(0).getValue());
+
+        assertEquals(Suits.CLUBS, bestHand.get(1).getSuit());
+        assertEquals(10, bestHand.get(1).getValue());
+
+        assertEquals(Suits.DIAMONDS, bestHand.get(2).getSuit());
+        assertEquals(11, bestHand.get(2).getValue());
+
+        assertEquals(Suits.CLUBS, bestHand.get(3).getSuit());
+        assertEquals(12, bestHand.get(3).getValue());
+
+        assertEquals(Suits.SPADES, bestHand.get(4).getSuit());
+        assertEquals(1, bestHand.get(4).getValue());
+        assertEquals(10, score);
     }
 }

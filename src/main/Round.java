@@ -15,13 +15,15 @@ public class Round {
     private List<Seat> players;
     private List<Card> cards;
     private boolean hasRaised;
+    private int pot;
 
     public Round(List<Player> players){
         this.players = new ArrayList<Seat>();
         cards = new ArrayList<>();
         for(Player player : players){
-            this.players.add(new Seat(player));
+            this.players.add(new Seat(player, 500));
         }
+        pot = 0;
         dealer = 0;
         smallBLind = 1;
         bigBlind = smallBLind + 1 % players.size();
@@ -61,6 +63,8 @@ public class Round {
         Seat bbPlayer = players.get(bigBlind);
         sbPlayer.makeBet(smallBlindValue);
         bbPlayer.makeBet(bigBlindValue);
+        pot += smallBlindValue;
+        pot += bigBlindValue;
 
         int playerPosition2 = (bigBlind + 1) % players.size();
         Seat currentPlayer = players.get(playerPosition2);
@@ -104,6 +108,7 @@ public class Round {
             Seat player = players.get(seat);
             int value = player.bet();
             maxBet += value;
+            pot += value;
             player.makeBet(value);
             for (int i = 0; i < players.size(); i++) {
                 Seat playerToDecide = players.get(i);
@@ -117,10 +122,12 @@ public class Round {
             Seat player = players.get(seat);
             int valueToBet = maxBet - player.getBet();
             player.makeBet(valueToBet);
+            pot += valueToBet;
         }else if(action == Actions.BET){
             Seat player = players.get(seat);
             int value = player.bet();
             player.makeBet(value);
+            pot += value;
         }
 
         Seat playerToDecide = players.get(seat);
@@ -274,15 +281,41 @@ public class Round {
             var judge = new Judge(allCards);
             judge.testAllPossibilities();
 
+            seat.setBestHand(judge.getBestHand(), judge.getBestHandScore());
+
+            System.out.println("===========================================");
+            System.out.printf("JOGADOR %s: %d\n", seat.getPlayerName(), judge.getBestHandScore());
+            seat.showBestHand();
+
         }
 
+        ArrayList<Seat> winners = new ArrayList<Seat>();
+
+        int highScore = 0;
+        for(Seat seat : players){
+            if(!seat.isActive()){
+                continue;
+            }
+
+            if(seat.getBestHandScore() > highScore){
+                winners.clear();
+                winners.add(seat);
+                highScore = seat.getBestHandScore();
+            }else if(seat.getBestHandScore() == highScore){
+                winners.add(seat);
+            }
+        }
+
+        int prizePerSeat = pot / winners.size();
+        for(Seat player : winners){
+            System.out.printf("%s ganhou %d fichas\n", player.getPlayerName(), prizePerSeat);
+            player.addChips(prizePerSeat);
+        }
     }
 }
 /*
 TODO:
-    Criar lógica de ganhador
     ALl-in
-    Finalizar o round dando as fichas para o ganhador
     Refactor utilizando alguns design patterns para melhorar o código
     Adicionar IA
     Adicionar multiplayer online

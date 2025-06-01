@@ -11,11 +11,15 @@ public class Seat {
     private int bet;
     private Actions action;
     private boolean hasToPlay = false;
+    private ArrayList<Card> bestHand = new ArrayList<>();
+    private int bestHandScore = 0;
+    private int chipCount;
 
-    public Seat(Player player){
+    public Seat(Player player, int cihpCount){
         this.player = player;
         this.cards = new ArrayList<Card>();
         bet = 0;
+        this.chipCount = cihpCount;
     }
 
     public void giveCard(Card card) throws Exception {
@@ -27,6 +31,25 @@ public class Seat {
 
     public void showHand(){
         for (Card card : cards) {
+            card.print();
+        }
+    }
+
+    public int getChipCount(){
+        return chipCount;
+    }
+
+    public void addChips(int chips){
+        chipCount += chips;
+    }
+
+    public void setBestHand(ArrayList<Card> bestHand, int bestHandScore){
+        this.bestHand = bestHand;
+        this.bestHandScore = bestHandScore;
+    }
+
+    public void showBestHand(){
+        for (Card card : bestHand) {
             card.print();
         }
     }
@@ -124,5 +147,9 @@ public class Seat {
 
     public ArrayList<Card> getCards() {
         return cards;
+    }
+
+    public int getBestHandScore() {
+        return bestHandScore;
     }
 }

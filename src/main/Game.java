@@ -58,8 +58,9 @@ public class Game {
 
     private Scanner getScanner() throws IOException {
         if( Program.MOCK){
-            if(Files.notExists(Path.of("main/players.txt"))) {
-                Path file = Files.createFile(Path.of("main/players.txt"));
+            if(Files.notExists(Path.of("src/main/players.txt"))) {
+                Path path = Path.of("src/main/players.txt");
+                Path file = Files.createFile(path);
                 List<String> names = new ArrayList<String>();
                 names.add("Renan");
                 names.add("Luis");
@@ -73,7 +74,7 @@ public class Game {
             }
             Scanner sc = null;
             try {
-                FileReader fr = new FileReader("main/players.txt");
+                FileReader fr = new FileReader("src/main/players.txt");
                 return new Scanner(fr);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
