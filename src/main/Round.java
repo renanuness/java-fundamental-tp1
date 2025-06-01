@@ -315,6 +315,8 @@ public class Round {
 }
 /*
 TODO:
+    Define high card
+    Untie when players has same points but different high cards
     ALl-in
     Refactor utilizando alguns design patterns para melhorar o código
     Adicionar IA
