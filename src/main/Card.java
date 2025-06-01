@@ -28,4 +28,8 @@ public class Card {
     public Suits getSuit(){
         return suit;
     }
+
+    public int getValue(){
+        return value;
+    }
 }

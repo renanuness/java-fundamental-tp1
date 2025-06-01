@@ -14,6 +14,7 @@ public class Game {
     private final int MAX_PLAYERS = 10;
     private final int START_CHIP_COUNT = 25_000;
     private Round round;
+
     public Game() throws Exception {
         AddPlayers();
         StartGame();
@@ -51,6 +52,8 @@ public class Game {
         round.river();
         System.out.println("=========================================================");
         round.revealCards();
+        System.out.println("=========================================================");
+        round.judgeHands();
     }
 
     private Scanner getScanner() throws IOException {

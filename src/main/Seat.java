@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Seat {
     private Player player;
-    private List<Card> cards;
+    private ArrayList<Card> cards;
     private boolean active;
     private int bet;
     private Actions action;
@@ -120,5 +120,9 @@ public class Seat {
 
     public void setHasToPlay(boolean hasToPlay) {
         this.hasToPlay = hasToPlay;
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 }

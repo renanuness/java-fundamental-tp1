@@ -261,6 +261,22 @@ public class Round {
         }
         printCards();
     }
+
+    public void judgeHands() {
+        for(Seat seat : players){
+            if(!seat.isActive()){
+                continue;
+            }
+
+            ArrayList<Card> allCards = new ArrayList<Card>();
+            allCards.addAll(seat.getCards());
+            allCards.addAll(cards);
+            var judge = new Judge(allCards);
+            judge.testAllPossibilities();
+
+        }
+
+    }
 }
 /*
 TODO:
